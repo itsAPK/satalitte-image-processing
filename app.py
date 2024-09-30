@@ -10,8 +10,8 @@ from openpyxl import Workbook
 app = Flask(__name__)
 
 # Set directories for image uploads and outputs
-UPLOAD_FOLDER = 'uploads/'
-OUTPUT_FOLDER = 'output/'
+UPLOAD_FOLDER = 'static/uploads/'
+OUTPUT_FOLDER = 'static/output/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
@@ -61,21 +61,20 @@ def upload_image():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
 
-        # Perform image segmentation and ROI selection
+        # Process the image (this should return processed_image and roi_data)
         processed_image, roi_data = process_image(filepath)
 
         if processed_image is None or roi_data is None:
-            return "Error processing image", 400  # Return an error response
+            return "Error processing image", 400  # Handle error appropriately
 
         # Save the processed image
         output_filename = 'stencil_' + filename
         output_filepath = os.path.join(app.config['OUTPUT_FOLDER'], output_filename)
         cv2.imwrite(output_filepath, processed_image)
-
+        print(roi_data,filename,output_filename)
         # Return the processed image and ROI data
         return render_template('index.html', filename=filename, processed_image=output_filename, roi_data=roi_data)
 
-    return redirect(request.url)
 # Route to export ROI data to Excel
 @app.route('/export', methods=['POST'])
 def export_to_excel():

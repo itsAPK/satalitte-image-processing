@@ -15,26 +15,27 @@
         <button type="submit">Upload Image</button>
     </form>
 
-    <!-- Display uploaded and processed images -->
     {% if filename %}
-        <h2>Original Image</h2>
-        <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Original Image" width="300">
+    <h2>Original Image</h2>
+    <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Original Image" width="300">
 
-        <h2>Processed Image (Stencil)</h2>
-        <img src="{{ url_for('static', filename='output/' + processed_image) }}" alt="Processed Image" width="300">
+    <h2>Processed Image (Stencil)</h2>
+    <img src="{{ url_for('static', filename='output/' + processed_image) }}" alt="Processed Image" width="300">
 
-        <!-- Display ROI Data -->
-        <h2>ROI Data</h2>
-        <p id="lat-long">Lat/Long: </p>
-        <p id="side-lengths">Side Lengths: </p>
-        <p id="area">Area: </p>
+    <!-- Display ROI Data -->
+    <h2>ROI Data</h2>
+    <p id="lat-long">Lat/Long: {{ roi_data.lat_long }}</p>
+    <p id="side-lengths">Side Lengths: {{ roi_data.side_lengths }}</p>
+    <p id="area">Area: {{ roi_data.area }}</p>
 
-        <!-- Export ROI Data to Excel -->
-        <form action="/export" method="POST">
-            <input type="hidden" name="roi_data" value="{{ roi_data }}">
-            <button type="submit">Export to Excel</button>
-        </form>
-    {% endif %}
+    <!-- Export ROI Data to Excel -->
+    <form action="/export" method="POST">
+        <input type="hidden" name="roi_data" value="{{ roi_data }}">
+        <button type="submit">Export to Excel</button>
+    </form>
+{% endif %}
+
+
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
