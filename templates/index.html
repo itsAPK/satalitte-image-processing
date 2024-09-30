@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processing with Flask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Satellite Image Processing</h1>
+    
+    <!-- Image Upload Form -->
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Upload Image</button>
+    </form>
+
+    <!-- Display uploaded and processed images -->
+    {% if filename %}
+        <h2>Original Image</h2>
+        <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Original Image" width="300">
+
+        <h2>Processed Image (Stencil)</h2>
+        <img src="{{ url_for('static', filename='output/' + processed_image) }}" alt="Processed Image" width="300">
+
+        <!-- Display ROI Data -->
+        <h2>ROI Data</h2>
+        <p id="lat-long">Lat/Long: </p>
+        <p id="side-lengths">Side Lengths: </p>
+        <p id="area">Area: </p>
+
+        <!-- Export ROI Data to Excel -->
+        <form action="/export" method="POST">
+            <input type="hidden" name="roi_data" value="{{ roi_data }}">
+            <button type="submit">Export to Excel</button>
+        </form>
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
